@@ -16,7 +16,6 @@ export class FailerService {
   ) {
     this.overlayRef = this.createOverlay();
     this.keyboardListen();
-    this.openWindow();
   }
 
   public requestHandle<T>(req: HttpRequest<T>): HttpErrorResponse {
