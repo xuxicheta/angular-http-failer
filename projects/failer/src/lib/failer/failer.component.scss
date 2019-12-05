@@ -1,0 +1,52 @@
+@import '~@angular/cdk/overlay-prebuilt.css';
+
+lib-failer {
+  background: white;
+  display: block;
+  border-radius: 3px;
+  transition: all 1s ease;
+  width: 100%;
+  overflow: hidden;
+
+  .cdk-table {
+    margin: 0;
+    border-collapse: collapse;
+  }
+
+  .cdk-header-row {
+    height: 30px;
+    background: #f0f0f0;
+    text-align: center;
+
+    &:last-child th {
+      padding: 5px;
+    }
+  }
+
+  .cdk-column-method {
+    text-align: center;
+    width: 80px;
+  }
+  .cdk-column-url {
+    width: 100%;
+  }
+  .cdk-column-url-control {
+    text-align: left;
+  }
+  .cdk-column-error {
+    text-align: center;
+    width: 80px;
+  }
+  .cdk-column-code, .cdk-column-code-control {
+    width: 40px;
+
+    input {
+      width: 40px;
+    }
+  }
+}
+
+.failer-overlay {
+  height: 95%;
+  width: 95vw;
+}

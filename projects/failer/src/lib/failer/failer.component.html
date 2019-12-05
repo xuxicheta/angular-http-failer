@@ -1,0 +1,143 @@
+<table
+  cdk-table
+  [dataSource]="dataSource$ | async"
+>
+  <tbody>
+    <tr
+      cdk-header-row
+      *cdkHeaderRowDef="displayedColumns"
+    ></tr>
+    <tr
+      cdk-header-row
+      *cdkHeaderRowDef="['method-control', 'url-control', 'error-control', 'code-control']; sticky: true"
+    ></tr>
+    <tr
+      cdk-row
+      *cdkRowDef="let row; columns: displayedColumns;"
+    ></tr>
+
+    <ng-container cdkColumnDef="method">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        {{columnsHeaders.method}}
+      </th>
+      <td
+        cdk-cell
+        *cdkCellDef="let request"
+      >
+        {{request.requestMold.method}}
+      </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="url">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        {{columnsHeaders.url}}
+      </th>
+      <td
+        cdk-cell
+        *cdkCellDef="let request"
+      >
+        {{request.requestMold.url}}
+      </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="error">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        {{columnsHeaders.error}}
+      </th>
+      <td
+        cdk-cell
+        *cdkCellDef="let request"
+      >
+        <input
+          type="checkbox"
+          color="warn"
+          [ngModel]="request.error"
+          (ngModelChange)="onErrorToggle($event, request)"
+        >
+      </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="code">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        {{columnsHeaders.code}}
+      </th>
+      <td
+        cdk-cell
+        *cdkCellDef="let request"
+      >
+        <input
+          *ngIf="request.error"
+          type="number"
+          (change)="onErrorCodeChange($event.target.value, request)"
+          [placeholder]="request.code"
+          [value]="request.code"
+        >
+      </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="method-control">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        <select [formControl]="filterForm.get('method')">
+          <option value="any">any</option>
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="PATCH">PATCH</option>
+          <option value="DELETE">DELETE</option>
+        </select>
+      </th>
+    </ng-container>
+
+    <ng-container cdkColumnDef="url-control">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        <input
+          type="text"
+          [formControl]="filterForm.get('url')"
+        >
+      </th>
+    </ng-container>
+
+    <ng-container cdkColumnDef="error-control">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        <select [formControl]="filterForm.get('error')">
+          <option value="any">any</option>
+          <option value="no">no</option>
+          <option value="error">error</option>
+        </select>
+      </th>
+    </ng-container>
+
+    <ng-container cdkColumnDef="code-control">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        <input
+          type="text"
+          [formControl]="filterForm.get('code')"
+        >
+      </th>
+    </ng-container>
+  </tbody>
+</table>
