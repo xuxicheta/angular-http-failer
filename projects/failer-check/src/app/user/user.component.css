@@ -1,0 +1,10 @@
+:host {
+  padding: 20px;
+  display: flex;
+
+  
+}
+
+:host div {
+    padding: 5px;
+  }

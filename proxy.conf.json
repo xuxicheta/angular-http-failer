@@ -1,5 +1,5 @@
 {
-  "/api": {
+  "/": {
     "target": "https://reqres.in/api",
     "secure": true,
     "changeOrigin": true,

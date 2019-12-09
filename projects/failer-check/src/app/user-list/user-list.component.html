@@ -1,1 +1,12 @@
-<p>user-list works!</p>
+<table>
+  <tbody>
+    <tr
+      *ngFor="let user of (users$ | async)?.data"
+      (click)="onUserClick(user)"
+    >
+      <td>{{user.id}}</td>
+      <td>{{user.first_name}}</td>
+      <td>{{user.last_name}}</td>
+    </tr>
+  </tbody>
+</table>

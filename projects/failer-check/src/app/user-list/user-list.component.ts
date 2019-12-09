@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { UserListService, User } from '../user-list.service';
 
 @Component({
   selector: 'app-user-list',
@@ -7,10 +8,17 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserListComponent implements OnInit {
+  public users$ = this.usersService.fetchList('1');
 
-  constructor() { }
+  constructor(
+    private usersService: UserListService,
+  ) { }
 
   ngOnInit() {
+  }
+
+  public onUserClick(user: User) {
+    this.usersService.setActive(user);
   }
 
 }
