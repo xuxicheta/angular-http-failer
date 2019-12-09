@@ -8,9 +8,10 @@ import { DbService } from './db.service';
 import { FailerInterceptor, failerInterceptorProvider } from './failer.interceptor';
 import { FailerService } from './failer.service';
 import { FailerComponent } from './failer/failer.component';
+import { SortDirective } from './sort.directive';
 
 @NgModule({
-  declarations: [FailerComponent],
+  declarations: [FailerComponent, SortDirective],
   entryComponents: [FailerComponent],
   imports: [
     CommonModule,
