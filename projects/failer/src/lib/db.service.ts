@@ -1,9 +1,7 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { mergeMap, shareReplay } from 'rxjs/operators';
-
-export const OBJECT_NAME = new InjectionToken<string>('indexedDbObjectName');
-export const KEY_PATH = new InjectionToken<string>('indexedDbKeyPath');
+import { FailerConfig, FAILER_CONFIG } from './config';
 
 @Injectable()
 export class DbService<T = any> {
@@ -11,12 +9,11 @@ export class DbService<T = any> {
   private db$: Observable<IDBDatabase> = this.createDb();
 
   constructor(
-    @Inject(OBJECT_NAME) private objectName: string,
-    @Inject(KEY_PATH) private keyPath: string,
+    @Inject(FAILER_CONFIG) private config: FailerConfig,
   ) { }
 
   private createDb(): Observable<IDBDatabase> {
-    const openRequest: IDBOpenDBRequest = indexedDB.open(this.objectName, this.version);
+    const openRequest: IDBOpenDBRequest = indexedDB.open(this.config.prefix + 'failer', this.version);
 
     openRequest.onupgradeneeded = (evt: IDBVersionChangeEvent) => this.onUpgradeNeeded(openRequest.result);
 
@@ -32,10 +29,10 @@ export class DbService<T = any> {
   }
 
   private onUpgradeNeeded(db: IDBDatabase): void {
-    if (db.objectStoreNames.contains(this.objectName)) {
+    if (db.objectStoreNames.contains(this.config.objectName)) {
       return;
     }
-    db.createObjectStore(this.objectName, { keyPath: this.keyPath });
+    db.createObjectStore(this.config.objectName, { keyPath: this.config.keyPath });
   }
 
   public lay(value: T): Observable<IDBValidKey> {
@@ -63,8 +60,8 @@ export class DbService<T = any> {
   }
 
   private createIDBObjectStore(db: IDBDatabase, mode: IDBTransactionMode): IDBObjectStore {
-    const transaction: IDBTransaction = db.transaction(this.objectName, mode);
-    return transaction.objectStore(this.objectName);
+    const transaction: IDBTransaction = db.transaction(this.config.objectName, mode);
+    return transaction.objectStore(this.config.objectName);
   }
 
   private fromIDBRequest<R>(idbRequest: IDBRequest<R>): Observable<R> {

@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserComponent } from './user/user.component';
+import { FailerModule } from 'failer';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { UserComponent } from './user/user.component';
   imports: [
     BrowserModule,
     HttpClientModule,
+    FailerModule.forRoot({ prefix: 'failer-check_' }),
   ],
   providers: [],
   bootstrap: [AppComponent]
