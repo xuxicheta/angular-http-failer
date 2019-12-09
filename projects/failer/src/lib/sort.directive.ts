@@ -48,7 +48,7 @@ export class SortDirective implements OnInit {
     this.renderer.setStyle(box, 'position', 'relative');
     this.renderer.setStyle(box, 'cursor', 'pointer');
     this.renderer.setStyle(box, 'opacity', '0');
-    this.renderer.setStyle(box, 'transition', 'all 0.3s ease');
+    this.renderer.setStyle(box, 'transition', 'all 0.2s ease');
 
     this.renderer.appendChild(parent, box);
     return box;

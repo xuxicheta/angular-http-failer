@@ -1,9 +1,10 @@
-@import '~@angular/cdk/overlay-prebuilt.css';
+@import "~@angular/cdk/overlay-prebuilt.css";
 
 lib-failer {
   background: white;
   display: block;
-  border-radius: 3px;
+  border-radius: 8px;
+  padding: 8px;
   transition: all 1s ease;
   width: 100%;
   overflow: hidden;
@@ -19,30 +20,50 @@ lib-failer {
     text-align: center;
 
     &:last-child th {
-      padding: 5px;
+      padding-bottom: 5px;
     }
+  }
+
+  td, th {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .cdk-column-method {
     text-align: center;
-    width: 80px;
+    min-width: 80px;
   }
-  .cdk-column-url {
-    width: 100%;
-  }
+
+  .cdk-column-url,
   .cdk-column-url-control {
+    width: calc(100%);
     text-align: left;
+    
   }
+
   .cdk-column-error {
     text-align: center;
-    width: 80px;
+    min-width: 80px;
   }
-  .cdk-column-code, .cdk-column-code-control {
-    width: 40px;
+  .cdk-column-code,
+  .cdk-column-code-control {
+    min-width: 80px;
 
     input {
-      width: 40px;
+      width: 70px;
     }
+  }
+
+  select {
+    background: white;
+    cursor: pointer;
+  }
+
+  select,
+  input {
+    padding: 5px;
+    height: 28px;
+    box-sizing: border-box;
   }
 }
 
