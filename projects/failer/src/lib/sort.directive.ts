@@ -1,5 +1,6 @@
 import { Directive, ElementRef, Renderer2, OnInit, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 
+// @todo implement it as component
 
 @Directive({
   selector: '[libSort]'

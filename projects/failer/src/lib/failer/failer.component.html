@@ -21,6 +21,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
         libSort
+        (sort)="onSort($event, 'method')"
       >
         {{columnsHeaders.method}}
       </th>
@@ -37,6 +38,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
         libSort
+        (sort)="onSort($event, 'url')"
       >
         {{columnsHeaders.url}}
       </th>
@@ -53,6 +55,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
         libSort
+        (sort)="onSort($event, 'error')"
       >
         {{columnsHeaders.error}}
       </th>
@@ -74,6 +77,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
         libSort
+        (sort)="onSort($event, 'code')"
       >
         {{columnsHeaders.code}}
       </th>

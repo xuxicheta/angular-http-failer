@@ -19,11 +19,6 @@ export class FailerComponent implements OnInit, OnDestroy {
   public displayedColumns = this.failerTableService.displayedColumns;
   public columnsHeaders = this.failerTableService.columnsHeaders;
 
-  // @ViewChild(MatSort, { static: true })
-  // set sort(sort: MatSort) {
-  //   this.failerTableService.setSort(sort);
-  // }
-
   constructor(
     private failerRequestsState: FailerRequestsState,
     private failerTableService: FailerTableService,
@@ -51,6 +46,10 @@ export class FailerComponent implements OnInit, OnDestroy {
       requestId,
       code: +code,
     });
+  }
+
+  onSort(direction: number, sortName: string) {
+    
   }
 
   private buildFilterForm(): FormGroup {
