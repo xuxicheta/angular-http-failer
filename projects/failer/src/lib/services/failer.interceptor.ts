@@ -2,6 +2,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { FailerService } from './failer.service';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class FailerInterceptor implements HttpInterceptor {
@@ -11,11 +12,11 @@ export class FailerInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const errorResponse = this.failerService.requestHandle(req);
-    if (errorResponse) {
-      return throwError(errorResponse);
-    }
-    return next.handle(req);
+    return this.failerService.requestHandle(req).pipe(
+      switchMap(errorResponse => errorResponse
+        ? throwError(errorResponse)
+        : next.handle(req))
+    );
   }
 }
 

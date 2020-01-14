@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, pluck } from 'rxjs/operators';
-import { DbService } from './indexeddb/db.service';
+import { DbService } from '../indexeddb/db.service';
 
 export interface RequestMold {
   url: string;
@@ -35,7 +35,7 @@ function initialState(): FailerRequestsEntityState {
     ui: {
       method: 'any',
       url: '',
-      errorCode: -1,
+      errorCode: -2,
     }
   };
 }
@@ -133,14 +133,18 @@ export class FailerRequestsState {
         condidions.push(request.requestMold.url.includes(ui.url));
       }
 
-      if (ui.errorCode) {
-        if (ui.errorCode === -1) {
+      switch (ui.errorCode) {
+        case -2: // unset
+          break;
+        case -1: // any error
           condidions.push(!!request.errorCode);
-        } else {
+          break;
+        case 0: // no error
+        case null: // no error
+          condidions.push(!request.errorCode);
+          break;
+        default: // specified error
           condidions.push(request.errorCode === ui.errorCode);
-        }
-      } else {
-        condidions.push(request.errorCode);
       }
 
       return condidions.every(Boolean);

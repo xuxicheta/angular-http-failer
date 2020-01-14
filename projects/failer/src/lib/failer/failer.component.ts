@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { FailerRequest, FailerRequestsState } from '../failer-requests.state';
-import { FailerTableService } from './failer-table.service';
+import { FailerRequest, FailerRequestsState } from '../services/failer-requests.state';
+import { FailerTableService } from '../services/failer-table.service';
 import { FAILER_FORM, failerFormProvider } from './failer-form.provider';
 
 @Component({

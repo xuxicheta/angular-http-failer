@@ -9,12 +9,12 @@
     ></tr>
     <tr
       cdk-header-row
-      *cdkHeaderRowDef="['method-control', 'url-control', 'code-control']; sticky: true"
+      *cdkHeaderRowDef="['method-control', 'url-control', 'delay-control', 'code-control']; sticky: true"
     ></tr>
     <tr
       cdk-row
       *cdkRowDef="let row; columns: displayedColumns;"
-      [class.red]="row.error"
+      [class.red]="row.errorCode"
       [attr.data-info]="row | json"
     ></tr>
 
@@ -49,6 +49,24 @@
         *cdkCellDef="let request"
       >
         {{request.requestMold.url}}
+      </td>
+    </ng-container>
+
+    <ng-container cdkColumnDef="delay">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        {{columnsHeaders.delay}}
+      </th>
+      <td
+        cdk-cell
+        *cdkCellDef="let request"
+      >
+        <input
+          type="text"
+          [(ngModel)]="request.delay"
+        >
       </td>
     </ng-container>
 
@@ -111,5 +129,17 @@
         ></lib-error-selector>
       </th>
     </ng-container>
+
+    <ng-container cdkColumnDef="delay-control">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+      </th>
+    </ng-container>
   </tbody>
 </table>
+
+<pre>
+  {{failerForm.value | json}}
+</pre>

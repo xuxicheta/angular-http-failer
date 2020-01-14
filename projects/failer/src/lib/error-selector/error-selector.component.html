@@ -3,12 +3,19 @@
   (ngModelChange)="updateValue($event)"
   style="width: 58px;"
 >
-  <option [value]="null">--</option>
+  <option
+    *ngIf="withCommon"
+    value="-2"
+  >
+    --
+  </option>
+  <option [value]="0">no</option>
+
   <option
     *ngIf="withCommon"
     value="-1"
   >
-    any
+    err
   </option>
   <optgroup
     *ngFor="let errorGroup of errorList; let index = index"

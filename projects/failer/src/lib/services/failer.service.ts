@@ -2,9 +2,10 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
 import { ComponentRef, Injectable } from '@angular/core';
-import { filter } from 'rxjs/operators';
+import { filter, mapTo, switchMap, map } from 'rxjs/operators';
 import { FailerRequest, FailerRequestsState, RequestMold } from './failer-requests.state';
-import { FailerComponent } from './failer/failer.component';
+import { FailerComponent } from '../failer/failer.component';
+import { Observable, timer } from 'rxjs';
 
 @Injectable()
 export class FailerService {
@@ -19,10 +20,17 @@ export class FailerService {
     this.openWindow();
   }
 
-  public requestHandle<T>(req: HttpRequest<T>): HttpErrorResponse {
+  public requestHandle<T>(req: HttpRequest<T>): Observable<HttpErrorResponse> {
     const requestId = `${req.method} ${req.url}`;
     const stored: FailerRequest = this.failerRequestsState.getEntity(requestId);
+    const delay = (stored && stored.delay) || 0;
 
+    return timer(delay).pipe(
+      map(() => this.requestErrorHandle(stored, requestId, req))
+    );
+  }
+
+  private requestErrorHandle<T>(stored: FailerRequest, requestId: string, req: HttpRequest<T>): HttpErrorResponse {
     if (!stored) {
       this.createMold(requestId, req);
       return null;
@@ -79,7 +87,7 @@ export class FailerService {
   private createOverlay(): OverlayRef {
     const positionStrategy = this.overlay.position().global().centerHorizontally().centerVertically();
 
-    const overlayRef =  this.overlay.create({
+    const overlayRef = this.overlay.create({
       hasBackdrop: true,
       panelClass: 'failer-overlay',
       disposeOnNavigation: true,
@@ -108,7 +116,7 @@ export class FailerService {
     }
 
     const failerPortal = new ComponentPortal(FailerComponent);
-    const dialogRef =  this.overlayRef.attach(failerPortal);
+    const dialogRef = this.overlayRef.attach(failerPortal);
 
     return dialogRef;
   }

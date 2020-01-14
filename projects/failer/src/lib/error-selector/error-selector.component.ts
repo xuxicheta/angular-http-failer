@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { HttpErrorsService } from '../failer/http-errors.service';
+import { HttpErrorsService } from '../services/http-errors.service';
 
 @Component({
   selector: 'lib-error-selector',
@@ -26,13 +26,13 @@ export class ErrorSelectorComponent implements OnInit, ControlValueAccessor {
 
 
   writeValue(outsideValue: number): void {
-    this.errorCode = outsideValue;
+    this.errorCode = +outsideValue;
     this.cdr.markForCheck();
   }
 
   updateValue(insideValue: number): void {
     this.onTouched();
-    this.onChange(insideValue);
+    this.onChange(+insideValue);
   }
 
   constructor(

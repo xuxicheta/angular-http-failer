@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FailerRequest, FailerRequestsState } from '../failer-requests.state';
+import { FailerRequest, FailerRequestsState } from './failer-requests.state';
 
 
 
@@ -39,6 +39,7 @@ export class FailerTableService {
     const headers = {
       method: 'Method',
       url: 'Url',
+      delay: 'Delay, ms',
       errorCode: 'ErrorCode',
     };
     const columns = Object.keys(headers) as (keyof typeof headers)[];
