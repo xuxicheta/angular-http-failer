@@ -10,9 +10,10 @@ import { FailerService } from './services/failer.service';
 import { FailerComponent } from './failer/failer.component';
 import { SortDirective } from './sort.directive';
 import { ErrorSelectorComponent } from './error-selector/error-selector.component';
+import { ClearerDirective } from './clearer.directive';
 
 @NgModule({
-  declarations: [FailerComponent, SortDirective, ErrorSelectorComponent],
+  declarations: [FailerComponent, SortDirective, ErrorSelectorComponent, ClearerDirective],
   entryComponents: [FailerComponent],
   imports: [
     CommonModule,

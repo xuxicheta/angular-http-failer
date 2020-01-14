@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { HttpErrorsService } from '../services/http-errors.service';
+import { AbstractCVA } from '../abstract-cva.class';
 
 @Component({
   selector: 'lib-error-selector',
@@ -13,17 +14,11 @@ import { HttpErrorsService } from '../services/http-errors.service';
     multi: true
   }]
 })
-export class ErrorSelectorComponent implements OnInit, ControlValueAccessor {
+export class ErrorSelectorComponent extends AbstractCVA implements ControlValueAccessor {
   public errorCode: number;
   public errorList = this.httpErrorsService.errorList;
 
   @Input() withCommon: boolean;
-
-  private onChange = (value: number) => { };
-  private onTouched = () => { };
-  registerOnChange = (fn: (value: any) => {}) => this.onChange = fn;
-  registerOnTouched = (fn: () => {}) => this.onTouched = fn;
-
 
   writeValue(outsideValue: number): void {
     this.errorCode = +outsideValue;
@@ -38,9 +33,7 @@ export class ErrorSelectorComponent implements OnInit, ControlValueAccessor {
   constructor(
     private httpErrorsService: HttpErrorsService,
     private cdr: ChangeDetectorRef,
-  ) { }
-
-  ngOnInit() {
+  ) {
+    super();
   }
-
 }
