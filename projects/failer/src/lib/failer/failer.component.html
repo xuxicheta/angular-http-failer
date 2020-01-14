@@ -77,7 +77,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
       >
-        <select [formControl]="filterForm.get('method')">
+        <select [formControl]="failerForm.get('method')">
           <option value="any">any</option>
           <option value="GET">GET</option>
           <option value="POST">POST</option>
@@ -95,7 +95,7 @@
       >
         <input
           type="text"
-          [formControl]="filterForm.get('url')"
+          [formControl]="failerForm.get('url')"
         >
       </th>
     </ng-container>
@@ -105,10 +105,10 @@
         cdk-header-cell
         *cdkHeaderCellDef
       >
-        <input
-          type="text"
-          [formControl]="filterForm.get('errorCode')"
-        >
+        <lib-error-selector
+          [formControl]="errorCodeControl"
+          [withCommon]="true"
+        ></lib-error-selector>
       </th>
     </ng-container>
   </tbody>

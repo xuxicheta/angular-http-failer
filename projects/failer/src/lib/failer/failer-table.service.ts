@@ -2,18 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FailerRequest, FailerRequestsState } from '../failer-requests.state';
 
-const columnsHeaders = {
-  method: 'Method',
-  url: 'Url',
-  errorCode: 'ErrorCode',
-};
-const displayedColumns = Object.keys(columnsHeaders) as (keyof typeof columnsHeaders)[];
+
 
 @Injectable()
 export class FailerTableService {
   // private dataSource = new MatTableDataSource<FailerRequest>();
-  public displayedColumns = displayedColumns;
-  public columnsHeaders = columnsHeaders;
+  public readonly table = this.createTableOptions();
 
   constructor(
     private failerRequestsState: FailerRequestsState,
@@ -39,5 +33,15 @@ export class FailerTableService {
       //   return this.dataSource;
       // }),
     );
+  }
+
+  private createTableOptions() {
+    const headers = {
+      method: 'Method',
+      url: 'Url',
+      errorCode: 'ErrorCode',
+    };
+    const columns = Object.keys(headers) as (keyof typeof headers)[];
+    return { headers, columns};
   }
 }

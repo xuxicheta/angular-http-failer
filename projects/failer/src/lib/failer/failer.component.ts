@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FailerRequest, FailerRequestsState } from '../failer-requests.state';
 import { FailerTableService } from './failer-table.service';
-import { HttpErrorsService } from './http-errors.service';
+import { FAILER_FORM, failerFormProvider } from './failer-form.provider';
 
 @Component({
   selector: 'lib-failer',
@@ -11,22 +11,26 @@ import { HttpErrorsService } from './http-errors.service';
   styleUrls: ['./failer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  providers: [FailerTableService],
+  providers: [FailerTableService, failerFormProvider],
 })
 export class FailerComponent implements OnInit, OnDestroy {
-  public dataSource$ = this.failerTableService.selectDataSource();
-  public filterForm: FormGroup;
   private sub = new Subscription();
-  public displayedColumns = this.failerTableService.displayedColumns;
-  public columnsHeaders = this.failerTableService.columnsHeaders;
+
+  public dataSource$ = this.failerTableService.selectDataSource();
+  public displayedColumns = this.failerTableService.table.columns;
+  public columnsHeaders = this.failerTableService.table.headers;
+
+  get errorCodeControl() {
+    return this.failerForm.get('errorCode') as FormControl;
+  }
 
   constructor(
     private failerRequestsState: FailerRequestsState,
     private failerTableService: FailerTableService,
+    @Inject(FAILER_FORM) public failerForm: FormGroup,
   ) { }
 
   ngOnInit() {
-    this.filterForm = this.buildFilterForm();
     this.sub.add(this.formSubscription());
   }
 
@@ -34,17 +38,10 @@ export class FailerComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  onErrorToggle(error: number, request: FailerRequest) {
+  onErrorToggle(errorCode: number, request: FailerRequest) {
     this.failerRequestsState.upsertEntity({
       requestId: request.requestId,
-      errorCode: request.errorCode || 400,
-    });
-  }
-
-  onErrorCodeChange(code: string, { requestId }: FailerRequest) {
-    this.failerRequestsState.upsertEntity({
-      requestId,
-      errorCode: +code,
+      errorCode,
     });
   }
 
@@ -52,25 +49,19 @@ export class FailerComponent implements OnInit, OnDestroy {
 
   }
 
-  private buildFilterForm(): FormGroup {
-    const form = new FormGroup({
-      method: new FormControl(),
-      url: new FormControl(),
-      errorCode: new FormControl(),
-    });
-
-    return form;
-  }
+  
 
   private formSubscription(): Subscription {
-    return new Subscription()
-      .add(this.filterForm.valueChanges
-        .subscribe(value => {
-          this.failerRequestsState.updateUi(value);
-        }))
-      .add(this.failerRequestsState.selectUi()
-        .subscribe(value => {
-          this.filterForm.setValue(value, { emitEvent: false });
-        }));
+    const sub1 = this.failerForm.valueChanges
+      .subscribe(value => {
+        this.failerRequestsState.updateUi(value);
+      });
+
+    const sub2 = this.failerRequestsState.selectUi()
+      .subscribe(value => {
+        this.failerForm.setValue(value, { emitEvent: false });
+      });
+
+    return new Subscription().add(sub1).add(sub2);
   }
 }

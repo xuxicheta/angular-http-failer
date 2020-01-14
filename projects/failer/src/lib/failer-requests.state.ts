@@ -35,7 +35,7 @@ function initialState(): FailerRequestsEntityState {
     ui: {
       method: 'any',
       url: '',
-      errorCode: null,
+      errorCode: -1,
     }
   };
 }

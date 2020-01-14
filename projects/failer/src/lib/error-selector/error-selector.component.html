@@ -4,6 +4,12 @@
   style="width: 58px;"
 >
   <option [value]="null">--</option>
+  <option
+    *ngIf="withCommon"
+    value="-1"
+  >
+    any
+  </option>
   <optgroup
     *ngFor="let errorGroup of errorList; let index = index"
     [label]="['4xx', '5xx'][index]"
