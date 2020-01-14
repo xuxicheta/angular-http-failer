@@ -1,0 +1,19 @@
+<select
+  [ngModel]="errorCode"
+  (ngModelChange)="updateValue($event)"
+  style="width: 58px;"
+>
+  <option [value]="null">--</option>
+  <optgroup
+    *ngFor="let errorGroup of errorList; let index = index"
+    [label]="['4xx', '5xx'][index]"
+  >
+    <option
+      *ngFor="let code of errorGroup"
+      [value]="code[0]"
+    >
+      {{code[0]}} {{code[1]}}
+    </option>
+  </optgroup>
+
+</select>

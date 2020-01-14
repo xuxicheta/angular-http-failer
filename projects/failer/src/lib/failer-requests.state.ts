@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, pluck } from 'rxjs/operators';
-import { DbService } from './db.service';
+import { DbService } from './indexeddb/db.service';
 
 export interface RequestMold {
   url: string;
@@ -11,18 +11,17 @@ export interface RequestMold {
 }
 
 export interface RequestUi {
+  errorCode: number;
   method: string;
   url: string;
-  error: string;
-  code: string;
 }
 
 export interface FailerRequest {
-  error: boolean;
-  code: number;
+  errorCode: number;
   message: string;
   requestMold: RequestMold;
   requestId: string;
+  delay: number;
 }
 
 interface FailerRequestsEntityState {
@@ -36,8 +35,7 @@ function initialState(): FailerRequestsEntityState {
     ui: {
       method: 'any',
       url: '',
-      error: 'any',
-      code: '',
+      errorCode: null,
     }
   };
 }
@@ -134,15 +132,17 @@ export class FailerRequestsState {
       if (ui.url) {
         condidions.push(request.requestMold.url.includes(ui.url));
       }
-      if (ui.error === 'no') {
-        condidions.push(!request.error);
+
+      if (ui.errorCode) {
+        if (ui.errorCode === -1) {
+          condidions.push(!!request.errorCode);
+        } else {
+          condidions.push(request.errorCode === ui.errorCode);
+        }
+      } else {
+        condidions.push(request.errorCode);
       }
-      if (ui.error === 'error') {
-        condidions.push(request.error);
-      }
-      if (ui.code) {
-        condidions.push(request.error && request.code.toString().includes(ui.code));
-      }
+
       return condidions.every(Boolean);
     };
   }

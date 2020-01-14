@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FailerRequest, FailerRequestsState } from '../failer-requests.state';
 import { FailerTableService } from './failer-table.service';
+import { HttpErrorsService } from './http-errors.service';
 
 @Component({
   selector: 'lib-failer',
@@ -33,31 +34,29 @@ export class FailerComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  onErrorToggle(error: boolean, request: FailerRequest) {
+  onErrorToggle(error: number, request: FailerRequest) {
     this.failerRequestsState.upsertEntity({
       requestId: request.requestId,
-      code: request.code || 400,
-      error,
+      errorCode: request.errorCode || 400,
     });
   }
 
   onErrorCodeChange(code: string, { requestId }: FailerRequest) {
     this.failerRequestsState.upsertEntity({
       requestId,
-      code: +code,
+      errorCode: +code,
     });
   }
 
   onSort(direction: number, sortName: string) {
-    
+
   }
 
   private buildFilterForm(): FormGroup {
     const form = new FormGroup({
       method: new FormControl(),
       url: new FormControl(),
-      code: new FormControl(),
-      error: new FormControl(),
+      errorCode: new FormControl(),
     });
 
     return form;

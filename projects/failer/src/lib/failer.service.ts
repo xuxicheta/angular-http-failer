@@ -28,11 +28,11 @@ export class FailerService {
       return null;
     }
 
-    if (!stored.error) {
+    if (!stored.errorCode) {
       return null;
     }
 
-    if (stored.error) {
+    if (stored.errorCode) {
       return this.createError(stored);
     }
   }
@@ -41,7 +41,7 @@ export class FailerService {
     console.warn('Response error by Failer at url', stored.requestId);
     return new HttpErrorResponse({
       error: 'Error induced by Failer',
-      status: stored.code,
+      status: stored.errorCode,
       statusText: stored.message,
       url: stored.requestMold.url,
     });
@@ -57,9 +57,9 @@ export class FailerService {
     const failerRequest: FailerRequest = {
       requestId,
       requestMold,
-      error: null,
       message: null,
-      code: null,
+      errorCode: null,
+      delay: null,
     };
     this.failerRequestsState.upsertEntity(failerRequest);
   }

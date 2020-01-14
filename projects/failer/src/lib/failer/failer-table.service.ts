@@ -5,8 +5,7 @@ import { FailerRequest, FailerRequestsState } from '../failer-requests.state';
 const columnsHeaders = {
   method: 'Method',
   url: 'Url',
-  error: 'Error',
-  code: 'Code',
+  errorCode: 'ErrorCode',
 };
 const displayedColumns = Object.keys(columnsHeaders) as (keyof typeof columnsHeaders)[];
 

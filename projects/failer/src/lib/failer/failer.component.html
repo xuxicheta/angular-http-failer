@@ -9,11 +9,13 @@
     ></tr>
     <tr
       cdk-header-row
-      *cdkHeaderRowDef="['method-control', 'url-control', 'error-control', 'code-control']; sticky: true"
+      *cdkHeaderRowDef="['method-control', 'url-control', 'code-control']; sticky: true"
     ></tr>
     <tr
       cdk-row
       *cdkRowDef="let row; columns: displayedColumns;"
+      [class.red]="row.error"
+      [attr.data-info]="row | json"
     ></tr>
 
     <ng-container cdkColumnDef="method">
@@ -50,48 +52,23 @@
       </td>
     </ng-container>
 
-    <ng-container cdkColumnDef="error">
+    <ng-container cdkColumnDef="errorCode">
       <th
         cdk-header-cell
         *cdkHeaderCellDef
         libSort
         (sort)="onSort($event, 'error')"
       >
-        {{columnsHeaders.error}}
+        {{columnsHeaders.errorCode}}
       </th>
       <td
         cdk-cell
         *cdkCellDef="let request"
       >
-        <input
-          type="checkbox"
-          color="warn"
-          [ngModel]="request.error"
+        <lib-error-selector
+          [ngModel]="request.errorCode"
           (ngModelChange)="onErrorToggle($event, request)"
-        >
-      </td>
-    </ng-container>
-
-    <ng-container cdkColumnDef="code">
-      <th
-        cdk-header-cell
-        *cdkHeaderCellDef
-        libSort
-        (sort)="onSort($event, 'code')"
-      >
-        {{columnsHeaders.code}}
-      </th>
-      <td
-        cdk-cell
-        *cdkCellDef="let request"
-      >
-        <input
-          *ngIf="request.error"
-          type="number"
-          (change)="onErrorCodeChange($event.target.value, request)"
-          [placeholder]="request.code"
-          [value]="request.code"
-        >
+        ></lib-error-selector>
       </td>
     </ng-container>
 
@@ -123,19 +100,6 @@
       </th>
     </ng-container>
 
-    <ng-container cdkColumnDef="error-control">
-      <th
-        cdk-header-cell
-        *cdkHeaderCellDef
-      >
-        <select [formControl]="filterForm.get('error')">
-          <option value="any">any</option>
-          <option value="no">no</option>
-          <option value="error">error</option>
-        </select>
-      </th>
-    </ng-container>
-
     <ng-container cdkColumnDef="code-control">
       <th
         cdk-header-cell
@@ -143,7 +107,7 @@
       >
         <input
           type="text"
-          [formControl]="filterForm.get('code')"
+          [formControl]="filterForm.get('errorCode')"
         >
       </th>
     </ng-container>

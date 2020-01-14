@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { mergeMap, shareReplay } from 'rxjs/operators';
-import { FailerConfig, FAILER_CONFIG } from './config';
+import { FailerConfig, FAILER_CONFIG } from './db-config';
 
 @Injectable()
 export class DbService<T = any> {
