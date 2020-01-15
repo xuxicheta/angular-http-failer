@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve failer-check --proxy-config proxy.conf.json",
+    "dev": "ng build failer --watch",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
