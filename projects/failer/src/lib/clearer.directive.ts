@@ -1,20 +1,33 @@
-import { Directive, ElementRef, OnInit, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { AfterViewInit, Directive, ElementRef, HostListener, Inject, OnDestroy, Renderer2 } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { startWith } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
+/** @dynamic */
 @Directive({
-  selector: '[libClearer]'
+  selector: '[libClearer]',
+  providers: [
+    {
+      provide: DOCUMENT,
+      useValue: document,
+    },
+  ]
 })
 export class ClearerDirective implements AfterViewInit, OnDestroy {
-  public div;
+  public button: HTMLDivElement;
   private sub = new Subscription();
-  private listening: () => void;
+
+  @HostListener('window:resize')
+  onResize() {
+    this.positionX();
+  }
 
   constructor(
     private el: ElementRef<HTMLElement>,
     private renderer: Renderer2,
     private control: NgControl,
+    @Inject(DOCUMENT) private document: Document
   ) { }
 
   ngAfterViewInit() {
@@ -22,46 +35,58 @@ export class ClearerDirective implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.hideX();
+    this.deleteX();
     this.sub.unsubscribe();
   }
 
-  private showX() {
-    const coords = this.el.nativeElement.getBoundingClientRect();
-    this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
-    const div = this.renderer.createElement('div');
-    this.renderer.setStyle(div, 'position', 'absolute');
-    this.renderer.setStyle(div, 'left', (coords.right - 20) + 'px');
-    this.renderer.setStyle(div, 'top', (coords.top + 5) + 'px');
-    this.renderer.setStyle(div, 'z-index', '10000');
-    this.renderer.setStyle(div, 'cursor', 'pointer');
-    this.listening = this.renderer.listen(div, 'click', () => {
+  private createX(): void {
+    if (this.button) {
+      return;
+    }
+    const button = this.renderer.createElement('div');
+
+    this.renderer.listen(button, 'click', () => {
       this.control.control.setValue(null);
     });
 
-    const x = this.renderer.createText('x');
-    this.renderer.appendChild(div, x);
-    this.renderer.appendChild(document.documentElement, div);
-    this.div = div;
+    this.renderer.setStyle(button, 'position', 'absolute');
+    this.renderer.setStyle(button, 'left', '0');
+    this.renderer.setStyle(button, 'top', '0');
+    this.renderer.setStyle(button, 'z-index', '1001');
+    this.renderer.setStyle(button, 'cursor', 'pointer');
+
+    this.renderer.appendChild(button, this.renderer.createText('⨯'));
+    this.renderer.appendChild(this.document.documentElement, button);
+
+    this.button = button;
   }
 
-  private hideX() {
-    if (this.div) {
-      this.listening();
-      this.renderer.removeChild(document.documentElement, this.div);
-      this.renderer.destroyNode(this.div);
+  private deleteX(): void {
+    if (this.button) {
+      this.renderer.removeChild(this.document.documentElement, this.button);
+      this.renderer.destroyNode(this.button);
+      this.button = null;
     }
   }
 
-  private listenControl() {
+  private positionX(): void {
+    if (!this.button) {
+      return;
+    }
+    const coords = this.el.nativeElement.getBoundingClientRect();
+    this.renderer.setStyle(this.button, 'transform', `translate(${coords.right - 20}px, ${coords.top + 5}px)`);
+  }
+
+  private listenControl(): Subscription {
     return this.control.control.valueChanges.pipe(
       startWith(this.control.control.value)
     )
       .subscribe(value => {
         if (value) {
-          this.showX();
+          this.createX();
+          this.positionX();
         } else {
-          this.hideX();
+          this.deleteX();
         }
       });
   }

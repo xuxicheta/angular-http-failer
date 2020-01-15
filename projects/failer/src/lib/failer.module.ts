@@ -3,14 +3,14 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClearerDirective } from './clearer.directive';
+import { ErrorSelectorComponent } from './error-selector/error-selector.component';
+import { FailerComponent } from './failer/failer.component';
 import { configComplete, FailerConfig, FAILER_CONFIG } from './indexeddb/db-config';
 import { DbService } from './indexeddb/db.service';
 import { FailerInterceptor, failerInterceptorProvider } from './services/failer.interceptor';
 import { FailerService } from './services/failer.service';
-import { FailerComponent } from './failer/failer.component';
 import { SortDirective } from './sort.directive';
-import { ErrorSelectorComponent } from './error-selector/error-selector.component';
-import { ClearerDirective } from './clearer.directive';
 
 @NgModule({
   declarations: [FailerComponent, SortDirective, ErrorSelectorComponent, ClearerDirective],
