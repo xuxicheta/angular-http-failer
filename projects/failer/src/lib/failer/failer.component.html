@@ -30,6 +30,8 @@
       <td
         cdk-cell
         *cdkCellDef="let request"
+        style="cursor: pointer;"
+        (dblclick)="onError400Toggle(request)"
       >
         {{request.requestMold.method}}
       </td>
@@ -41,12 +43,15 @@
         *cdkHeaderCellDef
         libSort
         (sort)="onSort($event, 'url')"
+        
       >
         {{columnsHeaders.url}}
       </th>
       <td
         cdk-cell
         *cdkCellDef="let request"
+        style="cursor: pointer;"
+        (dblclick)="onError400Toggle(request)"
       >
         {{request.requestMold.url}}
       </td>

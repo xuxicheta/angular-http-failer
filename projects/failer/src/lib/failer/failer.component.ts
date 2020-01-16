@@ -45,6 +45,15 @@ export class FailerComponent implements OnInit, OnDestroy {
     });
   }
 
+  onError400Toggle(request: FailerRequest) {
+    const errorCode = request.errorCode ? null : 400;
+
+    this.failerRequestsState.upsertEntity({
+      requestId: request.requestId,
+      errorCode,
+    });
+  }
+
   onSort(direction: number, sortName: string) {
   }
 
