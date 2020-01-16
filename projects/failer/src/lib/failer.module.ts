@@ -4,15 +4,19 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClearerDirective } from './clearer.directive';
+import { DeleteComponent } from './delete/delete.component';
 import { ErrorSelectorComponent } from './error-selector/error-selector.component';
+import { failerInitProvider } from './failer-init.provider';
 import { FailerComponent } from './failer/failer.component';
 import { configComplete, FailerConfig, FAILER_CONFIG } from './indexeddb/db-config';
 import { DbService } from './indexeddb/db.service';
-import { FailerInterceptor, failerInterceptorProvider } from './services/failer.interceptor';
 import { FailerHandlerService } from './services/failer-handler.service';
-import { SortDirective } from './sort.directive';
 import { FailerOpenerService } from './services/failer-opener.service';
-import { DeleteComponent } from './delete/delete.component';
+import { FailerRequestsState } from './services/failer-requests.state';
+import { FailerInterceptor, failerInterceptorProvider } from './services/failer.interceptor';
+import { SortDirective } from './sort.directive';
+
+
 
 @NgModule({
   declarations: [FailerComponent, SortDirective, ErrorSelectorComponent, ClearerDirective, DeleteComponent],
@@ -38,7 +42,9 @@ export class FailerModule {
         FailerHandlerService,
         FailerOpenerService,
         FailerInterceptor,
+        FailerRequestsState,
         DbService,
+        failerInitProvider,
       ]
     };
   }

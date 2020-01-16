@@ -24,110 +24,94 @@ export interface FailerRequest {
   delay: number;
 }
 
-interface FailerRequestsEntityState {
-  entities: Record<string, FailerRequest>;
-  ui: RequestUi;
-}
+type FailerEntities = Record<string, FailerRequest>;
 
-function initialState(): FailerRequestsEntityState {
+
+function initialUiState(): RequestUi {
   return {
-    entities: {},
-    ui: {
-      method: 'any',
-      url: '',
-      errorCode: -2,
-    }
+    method: 'any',
+    url: '',
+    errorCode: -2,
   };
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class FailerRequestsState {
-  private store$ = new BehaviorSubject<FailerRequestsEntityState>(initialState());
+  private entities$ = new BehaviorSubject<FailerEntities>({});
+  private ui$ = new BehaviorSubject<RequestUi>(initialUiState());
 
   constructor(
     private dbService: DbService<FailerRequest>,
   ) {
-    this.dbService.retreiveAll()
-      .subscribe(entities => {
-        this.set(entities);
-      });
+  }
+
+  public async init(): Promise<void> {
+    const entities = await this.dbService.retreiveAll().toPromise()
+    this.set(entities);
   }
 
   public selectAll(): Observable<FailerRequest[]> {
-    return this.store$.pipe(
-      pluck('entities'),
+    return this.entities$.pipe(
       distinctUntilChanged(),
       map(entities => Object.values(entities)),
     );
   }
 
   public set(requests: FailerRequest[]) {
-    this.store$.next({
-      ...this.store$.value,
-      entities: requests.reduce((acc, el) => {
-        acc[el.requestId] = el;
-        return acc;
-      }, {}),
-    });
+    const entities: Record<string, FailerRequest> = requests.reduce((acc, el) => {
+      acc[el.requestId] = el;
+      return acc;
+    }, {});
+    this.setEntities(entities);
   }
 
   public delete(requestId: string) {
-    const entities = { ...this.store$.value.entities };
+    const entities = { ...this.entities$.value };
     delete entities[requestId];
-    this.store$.next({
-      ...this.store$.value,
-      entities,
-    });
+    this.setEntities(entities);
     this.dbService.delete(requestId).subscribe();
+  }
+
+  private setEntities(entities: Record<string, FailerRequest>) {
+    this.entities$.next(entities);
+    console.log(entities);
   }
 
   public reset() {
     this.dbService.clear().subscribe();
-    return this.set([]);
+    return this.setEntities({});
   }
 
   public getEntity(requestId: string): FailerRequest {
-    return this.store$.value.entities[requestId];
+    return this.entities$.value[requestId];
   }
 
   public updateUi(ui: RequestUi): void {
-    this.store$.next({
-      ...this.store$.value,
-      ui: {
-        ...this.store$.value.ui,
-        ...ui,
-      },
+    this.ui$.next({
+      ...this.ui$.value,
+      ...ui,
     });
+    console.log(this.ui$.value);
   }
 
   public selectUi(): Observable<RequestUi> {
-    return this.store$.pipe(
-      pluck('ui'),
+    return this.ui$.pipe(
       distinctUntilChanged(),
     );
   }
 
   public upsertEntity(request: Partial<FailerRequest>): void {
-    let entities: Record<string, FailerRequest>;
-    if (!this.getEntity(request.requestId)) {
-      entities = {
-        ...this.store$.value.entities,
-        [request.requestId]: request as FailerRequest,
-      };
-    } else {
-      entities = {
-        ...this.store$.value.entities,
-        [request.requestId]: {
-          ...this.store$.value.entities[request.requestId],
-          ...request,
-        },
-      };
-    }
+    const previous: FailerRequest = this.entities$.value[request.requestId] || {} as FailerRequest;
+    const next: FailerRequest = {
+      ...previous,
+      ...request,
+    };
+    const entities: Record<string, FailerRequest> = {
+      ...this.entities$.value,
+      [request.requestId]: next,
+    };
 
-    this.store$.next({
-      ...this.store$.value,
-      entities,
-    });
+    this.setEntities(entities);
 
     this.dbService.lay(this.getEntity(request.requestId))
       .subscribe();

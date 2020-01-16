@@ -46,10 +46,7 @@ export class FailerComponent implements OnInit, OnDestroy {
   }
 
   onSort(direction: number, sortName: string) {
-
   }
-
-  
 
   private formSubscription(): Subscription {
     const sub1 = this.failerForm.valueChanges
