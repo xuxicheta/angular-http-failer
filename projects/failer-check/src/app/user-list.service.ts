@@ -1,16 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { shareReplay } from 'rxjs/operators';
-import { ApiResponse } from './core/response.interface';
+import { ApiResponse } from './types/api-response.interface';
 import { ReplaySubject } from 'rxjs';
+import { User } from './types/user.interface';
 
-export interface User {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  avatar: string;
-}
+
 
 @Injectable({
   providedIn: 'root'

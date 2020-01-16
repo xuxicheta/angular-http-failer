@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { UserListService, User } from '../user-list.service';
+import { UserListService } from '../user-list.service';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { UserService } from '../user.service';
+import { User } from '../types/user.interface';
 
 @Component({
   selector: 'app-user',
@@ -9,14 +12,22 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserComponent implements OnInit {
-  user$: Observable<User> = this.usersService.selectActive();
+  user$: Observable<User> = this.userListService.selectActive();
+  userFull$ = this.userFetching();
 
   constructor(
-    private usersService: UserListService,
+    private userListService: UserListService,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
-  
+
+  }
+
+  userFetching(): Observable<User> {
+    return this.user$.pipe(
+      switchMap(user => user && user.id && this.userService.fetchOne(user.id))
+    );
   }
 
 

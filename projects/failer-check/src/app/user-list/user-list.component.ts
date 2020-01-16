@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { UserListService, User } from '../user-list.service';
+import { UserListService } from '../user-list.service';
+import { User } from '../types/user.interface';
 
 @Component({
   selector: 'app-user-list',
