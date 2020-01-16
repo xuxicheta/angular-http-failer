@@ -102,7 +102,7 @@
         cdk-cell
         *cdkCellDef="let request"
       >
-        del
+        <lib-delete (click)="onDelete(request)"></lib-delete>
       </td>
     </ng-container>
 
@@ -159,12 +159,9 @@
         cdk-header-cell
         *cdkHeaderCellDef
       >
-      x
+        <lib-delete class="delete-all" (click)="onClear()"></lib-delete>
       </th>
     </ng-container>
   </tbody>
 </table>
 
-<pre>
-  {{failerForm.value | json}}
-</pre>

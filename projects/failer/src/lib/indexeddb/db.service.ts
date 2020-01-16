@@ -43,6 +43,22 @@ export class DbService<T = any> {
     );
   }
 
+  public delete(key: string): Observable<undefined> {
+    return this.db$.pipe(
+      mergeMap(db => this.fromIDBRequest(
+        this.createIDBObjectStore(db, 'readwrite').delete(key),
+      ))
+    );
+  }
+
+  public clear() {
+    return this.db$.pipe(
+      mergeMap(db => this.fromIDBRequest(
+        this.createIDBObjectStore(db, 'readwrite').clear(),
+      ))
+    );
+  }
+
   public retreive(key: string): Observable<T> {
     return this.db$.pipe(
       mergeMap(db => this.fromIDBRequest(

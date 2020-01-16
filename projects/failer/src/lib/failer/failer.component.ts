@@ -64,4 +64,12 @@ export class FailerComponent implements OnInit, OnDestroy {
 
     return new Subscription().add(sub1).add(sub2);
   }
+
+  onClear() {
+    this.failerRequestsState.reset();
+  }
+
+  onDelete(request: FailerRequest) {
+    this.failerRequestsState.delete(request.requestId);
+  }
 }

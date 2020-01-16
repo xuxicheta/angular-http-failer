@@ -12,9 +12,10 @@ import { FailerInterceptor, failerInterceptorProvider } from './services/failer.
 import { FailerHandlerService } from './services/failer-handler.service';
 import { SortDirective } from './sort.directive';
 import { FailerOpenerService } from './services/failer-opener.service';
+import { DeleteComponent } from './delete/delete.component';
 
 @NgModule({
-  declarations: [FailerComponent, SortDirective, ErrorSelectorComponent, ClearerDirective],
+  declarations: [FailerComponent, SortDirective, ErrorSelectorComponent, ClearerDirective, DeleteComponent],
   entryComponents: [FailerComponent],
   imports: [
     CommonModule,

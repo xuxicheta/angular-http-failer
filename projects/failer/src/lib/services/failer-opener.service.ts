@@ -11,7 +11,11 @@ export class FailerOpenerService {
 
   constructor(
     private overlay: Overlay,
-  ) { }
+  ) {
+    if (localStorage.getItem('opened')) {
+      this.openWindow();
+    }
+  }
 
   private createOverlay(): OverlayRef {
     const positionStrategy = this.overlay.position().global().centerHorizontally().centerVertically();
@@ -59,11 +63,14 @@ export class FailerOpenerService {
     const failerPortal = new ComponentPortal(FailerComponent);
     const dialogRef = this.overlayRef.attach(failerPortal);
 
+    localStorage.setItem('opened', '1');
+
     return dialogRef;
   }
 
   private close() {
     this.overlayRef.detach();
+    localStorage.removeItem('opened');
   }
 
   public destroy() {

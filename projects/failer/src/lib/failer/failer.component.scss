@@ -80,8 +80,11 @@ lib-failer {
   }
 
   input {
-    // background: unset;
     border: 1px solid #ccc;
+  }
+
+  .delete-all path {
+    fill: red;
   }
 }
 

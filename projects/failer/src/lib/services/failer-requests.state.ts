@@ -71,7 +71,18 @@ export class FailerRequestsState {
     });
   }
 
+  public delete(requestId: string) {
+    const entities = { ...this.store$.value.entities };
+    delete entities[requestId];
+    this.store$.next({
+      ...this.store$.value,
+      entities,
+    });
+    this.dbService.delete(requestId).subscribe();
+  }
+
   public reset() {
+    this.dbService.clear().subscribe();
     return this.set([]);
   }
 
