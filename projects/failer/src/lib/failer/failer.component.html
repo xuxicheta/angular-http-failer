@@ -9,7 +9,7 @@
     ></tr>
     <tr
       cdk-header-row
-      *cdkHeaderRowDef="['method-control', 'url-control', 'delay-control', 'code-control']; sticky: true"
+      *cdkHeaderRowDef="['method-control', 'url-control', 'delay-control', 'code-control', 'delete-control']; sticky: true"
     ></tr>
     <tr
       cdk-row
@@ -91,6 +91,21 @@
       </td>
     </ng-container>
 
+    <ng-container cdkColumnDef="delete">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+        del
+      </th>
+      <td
+        cdk-cell
+        *cdkCellDef="let request"
+      >
+        del
+      </td>
+    </ng-container>
+
     <ng-container cdkColumnDef="method-control">
       <th
         cdk-header-cell
@@ -136,6 +151,15 @@
         cdk-header-cell
         *cdkHeaderCellDef
       >
+      </th>
+    </ng-container>
+
+    <ng-container cdkColumnDef="delete-control">
+      <th
+        cdk-header-cell
+        *cdkHeaderCellDef
+      >
+      x
       </th>
     </ng-container>
   </tbody>

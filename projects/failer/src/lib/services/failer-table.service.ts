@@ -41,6 +41,7 @@ export class FailerTableService {
       url: 'Url',
       delay: 'Delay, ms',
       errorCode: 'ErrorCode',
+      delete: ''
     };
     const columns = Object.keys(headers) as (keyof typeof headers)[];
     return { headers, columns};
