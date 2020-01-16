@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FailerHandlerService } from './failer-handler.service';
+import { FailerOpenerService } from './failer-opener.service';
 
-describe('FailerService', () => {
+describe('FailerOpenerService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: FailerHandlerService = TestBed.get(FailerHandlerService);
+    const service: FailerOpenerService = TestBed.get(FailerOpenerService);
     expect(service).toBeTruthy();
   });
 });

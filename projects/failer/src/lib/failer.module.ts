@@ -9,8 +9,9 @@ import { FailerComponent } from './failer/failer.component';
 import { configComplete, FailerConfig, FAILER_CONFIG } from './indexeddb/db-config';
 import { DbService } from './indexeddb/db.service';
 import { FailerInterceptor, failerInterceptorProvider } from './services/failer.interceptor';
-import { FailerService } from './services/failer.service';
+import { FailerHandlerService } from './services/failer-handler.service';
 import { SortDirective } from './sort.directive';
+import { FailerOpenerService } from './services/failer-opener.service';
 
 @NgModule({
   declarations: [FailerComponent, SortDirective, ErrorSelectorComponent, ClearerDirective],
@@ -33,7 +34,8 @@ export class FailerModule {
           useValue: configComplete(config),
         },
         failerInterceptorProvider,
-        FailerService,
+        FailerHandlerService,
+        FailerOpenerService,
         FailerInterceptor,
         DbService,
       ]

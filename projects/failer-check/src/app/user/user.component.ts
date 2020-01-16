@@ -9,14 +9,16 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserComponent implements OnInit {
-  user$: Observable<User>;
+  user$: Observable<User> = this.usersService.selectActive();
 
   constructor(
     private usersService: UserListService,
   ) { }
 
   ngOnInit() {
-    this.user$ = this.usersService.selectActive();
+  
   }
+
+
 
 }
