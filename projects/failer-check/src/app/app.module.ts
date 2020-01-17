@@ -1,17 +1,16 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-import { UserListComponent } from './user-list/user-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { UserComponent } from './user/user.component';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { FailerModule } from 'failer';
+import { AppComponent } from './app.component';
+import { ButtonsComponent } from './buttons/buttons.component';
+import { ResultComponent } from './result/result.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserListComponent,
-    UserComponent
+    ButtonsComponent,
+    ResultComponent
   ],
   imports: [
     BrowserModule,

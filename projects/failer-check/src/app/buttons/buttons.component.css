@@ -1,0 +1,16 @@
+button {
+  display: block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+
+  font: 14px/100% Arial, Helvetica, sans-serif;
+  padding: 0.5em 1em 0.55em;
+  margin-bottom: 2px;
+}
+button:hover {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+button:active {
+  transform: translateY(1px);
+}
