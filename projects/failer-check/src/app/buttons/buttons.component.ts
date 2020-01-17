@@ -25,6 +25,26 @@ export class ButtonsComponent implements OnInit {
       ['GET', 'users?page=1'],
       ['GET', 'users/1'],
       ['GET', 'users/2'],
+      ['GET', 'users/3'],
+      ['GET', 'users/4'],
+      ['GET', 'users/5'],
+      ['POST', 'users', {
+        name: 'morpheus',
+        job: 'leader'
+      }],
+      ['DELETE', 'users/2'],
+      ['POST', 'register', { email: 'sydney@fife'}],
+      ['PATCH', 'users/2', {
+        name: 'morpheus',
+        job: 'zion resident'
+      }],
+      ['PUT', 'users/2', {
+        name: 'morpheus',
+        job: 'zion resident'
+      }],
+      ['GET', 'products?page=1'],
+      ['GET', 'products?page=2'],
+      ['GET', 'items?page=1'],
     ];
   }
 

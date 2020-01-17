@@ -1,2 +1,12 @@
-<div *ngIf="time$ | async as time">{{ time }} ms</div>
-<pre *ngIf="result$ | async as result">{{ result | json}}</pre>
+<ng-container *ngIf="result$ | async as result">
+  <ng-container *ngIf="result.type == 4 || result.ok === false">
+    <div>
+      <div [class.error]="!result.ok">
+        Response status: {{ result.status }} {{ result.statusText }}
+      </div>
+      <div >time: {{ time$ | async }} ms</div>
+    </div>
+    <pre>{{ result | json}}</pre>
+  </ng-container>
+
+</ng-container>

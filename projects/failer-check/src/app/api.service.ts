@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable, Subject, of, ReplaySubject } from 'rxjs';
+import { tap, catchError, filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   private result$ = new Subject<any>();
-  private time$ = new Subject<number>();
+  private time$ = new ReplaySubject<number>(1);
 
   constructor(
     private http: HttpClient
@@ -22,23 +22,19 @@ export class ApiService {
     return this.time$.asObservable();
   }
 
-  request(method: string, url: string, body = {}): Observable<any>  {
+  request(method: string, url: string, body = {}): Observable<any> {
     const start = performance.now();
     this.result$.next(null);
     this.time$.next(null);
 
-    return (() => {
-      switch (method) {
-        case 'POST': return this.http.post(url, body);
-        case 'PUT': return this.http.put(url, body);
-        case 'DELETE': return this.http.delete(url);
-        case 'PATCH': return this.http.patch(url, body);
-        case 'GET':
-        default:
-          return this.http.get(url);
-      }})().pipe(
+    return this.http.request(method, url, {
+      body,
+      observe: 'events',
+    })
+      .pipe(
+        filter(r => r.type === 4),
         catchError(err => of(err)),
-        tap(r => this.result$.next(r)),
+        tap(this.result$),
         tap(() => this.time$.next(Math.round(performance.now() - start))),
       );
   }

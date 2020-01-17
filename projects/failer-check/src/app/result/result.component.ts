@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '../api.service';
+import { Observable } from 'rxjs';
+import { HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-result',
@@ -8,7 +10,7 @@ import { ApiService } from '../api.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResultComponent implements OnInit {
-  result$ = this.apiService.selectResult();
+  result$: Observable<HttpResponse<any> | HttpErrorResponse> = this.apiService.selectResult();
   time$ = this.apiService.selectTime();
 
   constructor(
