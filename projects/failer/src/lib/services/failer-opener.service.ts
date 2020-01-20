@@ -67,6 +67,7 @@ export class FailerOpenerService {
     const dialogRef = this.overlayRef.attach(failerPortal);
 
     localStorage.setItem('opened', '1');
+    this.isOpened = true;
 
     return dialogRef;
   }
@@ -74,5 +75,6 @@ export class FailerOpenerService {
   private close() {
     this.overlayRef.detach();
     localStorage.removeItem('opened');
+    this.isOpened = false;
   }
 }
