@@ -1,5 +1,6 @@
-import { FailerRequestsState } from './services/failer-requests.state';
-import { FactoryProvider, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, FactoryProvider } from '@angular/core';
+import { FailerKeyBusService } from './failer-key-bus.service';
+import { FailerRequestsState } from './failer-requests.state';
 
 export function initializeFailer(failerRequestsState: FailerRequestsState) {
   return () => failerRequestsState.init();
@@ -8,6 +9,6 @@ export function initializeFailer(failerRequestsState: FailerRequestsState) {
 export const failerInitProvider: FactoryProvider = {
   provide: APP_INITIALIZER,
   useFactory: initializeFailer,
-  deps: [FailerRequestsState],
+  deps: [FailerRequestsState, FailerKeyBusService],
   multi: true,
 };

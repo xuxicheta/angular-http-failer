@@ -6,11 +6,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClearerDirective } from './clearer.directive';
 import { DeleteComponent } from './delete/delete.component';
 import { ErrorSelectorComponent } from './error-selector/error-selector.component';
-import { failerInitProvider } from './failer-init.provider';
 import { FailerComponent } from './failer/failer.component';
 import { configComplete, FailerConfig, FAILER_CONFIG } from './indexeddb/db-config';
 import { DbService } from './indexeddb/db.service';
 import { FailerHandlerService } from './services/failer-handler.service';
+import { failerInitProvider } from './services/failer-init.provider';
+import { FailerKeyBusService } from './services/failer-key-bus.service';
 import { FailerOpenerService } from './services/failer-opener.service';
 import { FailerRequestsState } from './services/failer-requests.state';
 import { FailerInterceptor, failerInterceptorProvider } from './services/failer.interceptor';
@@ -39,6 +40,7 @@ export class FailerModule {
           useValue: configComplete(config),
         },
         failerInterceptorProvider,
+        FailerKeyBusService,
         FailerHandlerService,
         FailerOpenerService,
         FailerInterceptor,

@@ -55,6 +55,7 @@ export class FailerComponent implements OnInit, OnDestroy {
   }
 
   onSort(direction: number, sortName: string) {
+    console.log(direction, sortName);
   }
 
   private formSubscription(): Subscription {

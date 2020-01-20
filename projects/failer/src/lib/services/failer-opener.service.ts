@@ -1,20 +1,35 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef, Injectable } from '@angular/core';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { FailerComponent } from '../failer/failer.component';
+import { FailerKeyBusService } from './failer-key-bus.service';
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class FailerOpenerService {
   private overlayRef: OverlayRef = this.createOverlay();
-  private listener: EventListener = this.keyboardListen();
+  private isOpened: boolean;
 
   constructor(
     private overlay: Overlay,
+    private failerKeyBusService: FailerKeyBusService,
   ) {
+    this.initSubscription();
     if (localStorage.getItem('opened')) {
-      this.openWindow();
+      this.open();
     }
+  }
+
+  private initSubscription(): Subscription {
+    return this.failerKeyBusService.selectKeyBus()
+      .subscribe(() => {
+        if (this.isOpened) {
+          this.close();
+        } else {
+          this.open();
+        }
+      });
   }
 
   private createOverlay(): OverlayRef {
@@ -43,19 +58,7 @@ export class FailerOpenerService {
     return overlayRef;
   }
 
-  private keyboardListen(): EventListener {
-    const keyboardListener: EventListener = (event: KeyboardEvent) => {
-      if (event.code === 'KeyD' && event.ctrlKey) {
-        this.openWindow();
-        event.preventDefault();
-      }
-    };
-
-    window.addEventListener('keydown', keyboardListener);
-    return keyboardListener;
-  }
-
-  private openWindow(): ComponentRef<FailerComponent> {
+  private open(): ComponentRef<FailerComponent> {
     if (this.overlayRef.hasAttached()) {
       return;
     }
@@ -71,9 +74,5 @@ export class FailerOpenerService {
   private close() {
     this.overlayRef.detach();
     localStorage.removeItem('opened');
-  }
-
-  public destroy() {
-    window.removeEventListener('keydown', this.listener);
   }
 }
