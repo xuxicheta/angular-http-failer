@@ -14,7 +14,7 @@ export class FailerKeyBusService {
 
   private keyboardListen(): EventListener {
     const keyboardListener: EventListener = (event: KeyboardEvent) => {
-      if (event.code === 'KeyQ' && event.ctrlKey) {
+      if (event.code === 'KeyD' && event.ctrlKey) {
         this.keyBus$.next();
         event.preventDefault();
       }

@@ -5,25 +5,15 @@
   "tasks": [
     {
       "type": "npm",
-      "label": "dev",
-      "script": "dev",
+      "label": "demo",
+      "script": "demo",
       "problemMatcher": []
     },
     {
       "type": "npm",
-      "label": "start",
-      "script": "start",
+      "label": "lib-watch",
+      "script": "lib-watch",
       "problemMatcher": []
     },
-    {
-      "type": "shell",
-      "label": "work",
-      "command": "echo start",
-      "dependsOn": [
-        "dev", "start"
-      ],
-      "dependsOrder": "sequence",
-      "problemMatcher": []
-    }
   ]
 }

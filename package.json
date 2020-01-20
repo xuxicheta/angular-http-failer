@@ -3,8 +3,8 @@
   "version": "1.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve failer-check --proxy-config proxy.conf.json",
-    "dev": "ng build failer --watch",
+    "demo": "ng serve failer-check --proxy-config proxy.conf.json",
+    "lib-watch": "ng build failer --watch",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

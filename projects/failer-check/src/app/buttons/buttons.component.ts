@@ -45,6 +45,7 @@ export class ButtonsComponent implements OnInit {
       ['GET', 'products?page=1'],
       ['GET', 'products?page=2'],
       ['GET', 'items?page=1'],
+      ['GET', 'items?delay=3'],
     ];
   }
 

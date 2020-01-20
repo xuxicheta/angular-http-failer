@@ -1,14 +1,14 @@
-import { APP_INITIALIZER, FactoryProvider } from '@angular/core';
-import { FailerKeyBusService } from './failer-key-bus.service';
+import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
+import { FailerOpenerService } from './failer-opener.service';
 import { FailerRequestsState } from './failer-requests.state';
 
-export function initializeFailer(failerRequestsState: FailerRequestsState) {
+export function bootstrapFailer(failerRequestsState: FailerRequestsState) {
   return () => failerRequestsState.init();
 }
 
-export const failerInitProvider: FactoryProvider = {
-  provide: APP_INITIALIZER,
-  useFactory: initializeFailer,
-  deps: [FailerRequestsState, FailerKeyBusService],
+export const failerBootstrapProvider = {
+  provide: APP_BOOTSTRAP_LISTENER,
   multi: true,
+  useFactory: bootstrapFailer,
+  deps: [FailerRequestsState, FailerOpenerService],
 };

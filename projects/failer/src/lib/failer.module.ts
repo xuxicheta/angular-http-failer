@@ -10,7 +10,7 @@ import { FailerComponent } from './failer/failer.component';
 import { configComplete, FailerConfig, FAILER_CONFIG } from './indexeddb/db-config';
 import { DbService } from './indexeddb/db.service';
 import { FailerHandlerService } from './services/failer-handler.service';
-import { failerInitProvider } from './services/failer-init.provider';
+import { failerBootstrapProvider } from './services/failer-init.provider';
 import { FailerKeyBusService } from './services/failer-key-bus.service';
 import { FailerOpenerService } from './services/failer-opener.service';
 import { FailerRequestsState } from './services/failer-requests.state';
@@ -46,7 +46,7 @@ export class FailerModule {
         FailerInterceptor,
         FailerRequestsState,
         DbService,
-        failerInitProvider,
+        failerBootstrapProvider,
       ]
     };
   }
