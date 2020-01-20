@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, Input, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { AbstractCVA } from '../abstract-cva.class';
+import { AbstractCVA } from '../cva/abstract-cva.class';
 import { HttpErrorsService } from '../services/http-errors.service';
 
 @Component({

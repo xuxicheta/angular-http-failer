@@ -1,10 +1,10 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef, Injectable } from '@angular/core';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { FailerComponent } from '../failer/failer.component';
 import { FailerKeyBusService } from './failer-key-bus.service';
-import { Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
 
 @Injectable()
 export class FailerOpenerService {
@@ -23,13 +23,7 @@ export class FailerOpenerService {
 
   private initSubscription(): Subscription {
     return this.failerKeyBusService.selectKeyBus()
-      .subscribe(() => {
-        if (this.isOpened) {
-          this.close();
-        } else {
-          this.open();
-        }
-      });
+      .subscribe(() => this.isOpened ? this.close() : this.open());
   }
 
   private createOverlay(): OverlayRef {
@@ -42,15 +36,13 @@ export class FailerOpenerService {
       positionStrategy,
     });
 
-    overlayRef.keydownEvents().pipe(
-      filter(event => event.code === 'Escape')
-    )
-      .subscribe(event => {
-        event.preventDefault();
-        this.close();
-      });
+    const keyClose$ = overlayRef.keydownEvents().pipe(
+      filter(event => event.code === 'Escape'),
+      tap(event => event.preventDefault()),
+    );
+    const clickClose$ = overlayRef.backdropClick();
 
-    overlayRef.backdropClick()
+    merge(keyClose$, clickClose$)
       .subscribe(() => {
         this.close();
       });

@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { FailerRequest, FailerRequestsState, RequestSort, RequestUi } from '../services/failer-requests.state';
-import { FailerTableService } from '../services/failer-table.service';
-import { FAILER_FORM, failerFormProvider } from './failer-form.provider';
-import { ArrayDataSource } from '@angular/cdk/collections';
+import { FailerRequest, FailerRequestsState, RequestUi } from '../services/failer-requests.state';
+import { failerFormProvider, FAILER_FORM } from './providers/failer-form.provider';
+import { failerTableProvider, FailerTableType, FAILER_TABLE } from './providers/failer-table.provider';
 
 @Component({
   selector: 'lib-failer',
@@ -12,14 +11,11 @@ import { ArrayDataSource } from '@angular/cdk/collections';
   styleUrls: ['./failer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  providers: [FailerTableService, failerFormProvider],
+  providers: [failerTableProvider, failerFormProvider],
 })
 export class FailerComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
-
   public dataSource$ = this.failerRequestsState.selectAll();
-  public displayedColumns = this.failerTableService.table.columns;
-  public columnsHeaders = this.failerTableService.table.headers;
 
   get errorCodeControl() {
     return this.failerForm.get('errorCode') as FormControl;
@@ -27,8 +23,8 @@ export class FailerComponent implements OnInit, OnDestroy {
 
   constructor(
     private failerRequestsState: FailerRequestsState,
-    private failerTableService: FailerTableService,
-    @Inject(FAILER_FORM) public failerForm: FormGroup,
+    @Inject(FAILER_TABLE) public readonly table: FailerTableType,
+    @Inject(FAILER_FORM) public readonly failerForm: FormGroup,
   ) { }
 
   ngOnInit() {

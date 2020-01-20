@@ -6,7 +6,7 @@
   <tbody>
     <tr
       cdk-header-row
-      *cdkHeaderRowDef="displayedColumns"
+      *cdkHeaderRowDef="table.columns"
     ></tr>
     <tr
       cdk-header-row
@@ -14,7 +14,7 @@
     ></tr>
     <tr
       cdk-row
-      *cdkRowDef="let row; columns: displayedColumns;"
+      *cdkRowDef="let row; columns: table.columns;"
       [class.red]="row.errorCode"
       [attr.data-info]="row | json"
     ></tr>
@@ -26,7 +26,7 @@
         libSort
         (sort)="onSort($event, 'method')"
       >
-        {{columnsHeaders.method}}
+        {{table.headers.method}}
       </th>
       <td
         cdk-cell
@@ -46,7 +46,7 @@
         (sort)="onSort($event, 'url')"
         
       >
-        {{columnsHeaders.url}}
+        {{table.headers.url}}
       </th>
       <td
         cdk-cell
@@ -63,7 +63,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
       >
-        {{columnsHeaders.delay}}
+        {{table.headers.delay}}
       </th>
       <td
         cdk-cell
@@ -84,7 +84,7 @@
         libSort
         (sort)="onSort($event, 'errorCode')"
       >
-        {{columnsHeaders.errorCode}}
+        {{table.headers.errorCode}}
       </th>
       <td
         cdk-cell
@@ -171,7 +171,6 @@
   </tbody>
 </table>
 
-<pre *ngIf="dataSource$ | async as dataSource"><div *ngFor="let data of dataSource">{{data.requestId}}</div></pre>
-<pre *ngIf="dataSource$ | async as dataSource"><div *ngFor="let data of dataSource">{{data.requestId}}</div></pre>
-<pre *ngIf="dataSource$ | async as dataSource"><div *ngFor="let data of dataSource">{{data.requestId}}</div></pre>
-
+<div *ngFor="let data of dataSource$ | async">{{data.requestId}}</div>
+<div *ngFor="let data of dataSource$ | async">{{data.requestId}}</div>
+<div *ngFor="let data of dataSource$ | async">{{data.requestId}}</div>
