@@ -1,6 +1,7 @@
+import { ArrayDataSource } from '@angular/cdk/collections';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, map, pluck } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { DbService } from '../indexeddb/db.service';
 
 export interface RequestMold {
@@ -14,6 +15,12 @@ export interface RequestUi {
   errorCode: number;
   method: string;
   url: string;
+  delay?: number;
+}
+
+export interface RequestSort {
+  prop: keyof RequestUi;
+  direction: number;
 }
 
 export interface FailerRequest {
@@ -27,18 +34,22 @@ export interface FailerRequest {
 type FailerEntities = Record<string, FailerRequest>;
 
 
-function initialUiState(): RequestUi {
-  return {
-    method: 'any',
-    url: '',
-    errorCode: -2,
-  };
-}
+const initialUi = (): RequestUi => ({
+  method: 'any',
+  url: '',
+  errorCode: -2,
+});
+
+const initialSort = (): RequestSort => ({
+  prop: null,
+  direction: 0,
+});
 
 @Injectable()
 export class FailerRequestsState {
   private entities$ = new BehaviorSubject<FailerEntities>({});
-  private ui$ = new BehaviorSubject<RequestUi>(initialUiState());
+  private ui$ = new BehaviorSubject<RequestUi>(initialUi());
+  private sort$ = new BehaviorSubject<RequestSort>(initialSort());
 
   constructor(
     private dbService: DbService<FailerRequest>,
@@ -46,11 +57,11 @@ export class FailerRequestsState {
   }
 
   public async init(): Promise<void> {
-    const entities = await this.dbService.retreiveAll().toPromise()
+    const entities = await this.dbService.retreiveAll().toPromise();
     this.set(entities);
   }
 
-  public selectAll(): Observable<FailerRequest[]> {
+  public selectAllRaw(): Observable<FailerRequest[]> {
     return this.entities$.pipe(
       distinctUntilChanged(),
       map(entities => Object.values(entities)),
@@ -91,11 +102,23 @@ export class FailerRequestsState {
       ...this.ui$.value,
       ...ui,
     });
-    console.log(this.ui$.value);
+  }
+
+  public updateSort(sort: RequestSort): void {
+    this.sort$.next({
+      ...this.sort$.value,
+      ...sort,
+    });
   }
 
   public selectUi(): Observable<RequestUi> {
     return this.ui$.pipe(
+      distinctUntilChanged(),
+    );
+  }
+
+  public selectSort(): Observable<RequestSort> {
+    return this.sort$.pipe(
       distinctUntilChanged(),
     );
   }
@@ -148,10 +171,39 @@ export class FailerRequestsState {
 
   public selectAllFiltered(): Observable<FailerRequest[]> {
     return combineLatest([
-      this.selectAll(),
+      this.selectAllRaw(),
       this.selectUi(),
     ]).pipe(
       map(([entities, ui]) => entities.filter(this.filterUi(ui)))
     );
+  }
+
+  public selectAll(): Observable<FailerRequest[]> {
+    return combineLatest([
+      this.selectAllFiltered(),
+      this.selectSort(),
+    ]).pipe(
+      map(([entities, sort]) => {
+        if (sort.direction && sort.prop) {
+          return entities.slice().sort(this.makeSortFn(sort));
+        }
+
+        return entities;
+      }),
+    );
+  }
+
+  private makeSortFn(sort: RequestSort) {
+    if (['delay', 'errorCode'].includes(sort.prop)) {
+      return (a: FailerRequest, b: FailerRequest) => {
+        return (a[sort.prop] - b[sort.prop]) * sort.direction;
+      };
+    }
+    if (['method', 'url'].includes(sort.prop)) {
+      return (a: FailerRequest, b: FailerRequest) => {
+        return (a.requestMold[sort.prop] as string).localeCompare(b.requestMold[sort.prop]) * sort.direction;
+      };
+    }
+    return (a: any, b: any) => 0;
   }
 }

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { FailerRequest, FailerRequestsState } from '../services/failer-requests.state';
+import { FailerRequest, FailerRequestsState, RequestSort, RequestUi } from '../services/failer-requests.state';
 import { FailerTableService } from '../services/failer-table.service';
 import { FAILER_FORM, failerFormProvider } from './failer-form.provider';
+import { ArrayDataSource } from '@angular/cdk/collections';
 
 @Component({
   selector: 'lib-failer',
@@ -16,7 +17,7 @@ import { FAILER_FORM, failerFormProvider } from './failer-form.provider';
 export class FailerComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
 
-  public dataSource$ = this.failerTableService.selectDataSource();
+  public dataSource$ = this.failerRequestsState.selectAll();
   public displayedColumns = this.failerTableService.table.columns;
   public columnsHeaders = this.failerTableService.table.headers;
 
@@ -54,8 +55,11 @@ export class FailerComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSort(direction: number, sortName: string) {
-    console.log(direction, sortName);
+  onSort(direction: number, prop: keyof RequestUi) {
+    this.failerRequestsState.updateSort({
+      direction,
+      prop,
+    });
   }
 
   private formSubscription(): Subscription {
@@ -78,5 +82,9 @@ export class FailerComponent implements OnInit, OnDestroy {
 
   onDelete(request: FailerRequest) {
     this.failerRequestsState.delete(request.requestId);
+  }
+
+  public trackBy(request: FailerRequest) {
+    return request.requestId;
   }
 }

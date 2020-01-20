@@ -1,6 +1,7 @@
 <table
   cdk-table
-  [dataSource]="dataSource$ | async"
+  [dataSource]="dataSource$"
+  [trackBy]="trackBy"
 >
   <tbody>
     <tr
@@ -81,7 +82,7 @@
         cdk-header-cell
         *cdkHeaderCellDef
         libSort
-        (sort)="onSort($event, 'error')"
+        (sort)="onSort($event, 'errorCode')"
       >
         {{columnsHeaders.errorCode}}
       </th>
@@ -169,4 +170,8 @@
     </ng-container>
   </tbody>
 </table>
+
+<pre *ngIf="dataSource$ | async as dataSource"><div *ngFor="let data of dataSource">{{data.requestId}}</div></pre>
+<pre *ngIf="dataSource$ | async as dataSource"><div *ngFor="let data of dataSource">{{data.requestId}}</div></pre>
+<pre *ngIf="dataSource$ | async as dataSource"><div *ngFor="let data of dataSource">{{data.requestId}}</div></pre>
 
