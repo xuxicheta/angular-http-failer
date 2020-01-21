@@ -2,7 +2,8 @@ import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FailerRequest, FailerRequestsState, RequestMold } from './failer-requests.state';
+import { FailerRequest, RequestMold } from '../models';
+import { FailerRequestsState } from '../state/failer-requests.state';
 import { FailerOpenerService } from './failer-opener.service';
 
 @Injectable()

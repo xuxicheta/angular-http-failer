@@ -1,6 +1,6 @@
 import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
 import { FailerOpenerService } from './failer-opener.service';
-import { FailerRequestsState } from './failer-requests.state';
+import { FailerRequestsState } from '../state/failer-requests.state';
 
 export function bootstrapFailer(failerRequestsState: FailerRequestsState) {
   return () => failerRequestsState.init();

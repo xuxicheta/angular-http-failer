@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { DbService } from '../indexeddb/db.service';
-import { FailerEntitiesState, FailerRequest } from '../state/failer-entities.state';
-import { FailerSortState, RequestSort } from '../state/failer-sort.state';
-import { FailerUiState, RequestUi } from '../state/failer-ui.state';
+import { FailerRequest, RequestUi, RequestSort } from '../models';
+import { FailerEntitiesState } from './failer-entities.state';
+import { FailerSortState } from './failer-sort.state';
+import { FailerUiState } from './failer-ui.state';
 
 
 @Injectable()

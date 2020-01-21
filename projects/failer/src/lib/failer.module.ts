@@ -13,7 +13,7 @@ import { FailerHandlerService } from './services/failer-handler.service';
 import { failerBootstrapProvider } from './services/failer-init.provider';
 import { FailerKeyBusService } from './services/failer-key-bus.service';
 import { FailerOpenerService } from './services/failer-opener.service';
-import { FailerRequestsState } from './services/failer-requests.state';
+import { FailerRequestsState } from './state/failer-requests.state';
 import { FailerInterceptor, failerInterceptorProvider } from './services/failer.interceptor';
 import { SortDirective } from './directives/sort.directive';
 

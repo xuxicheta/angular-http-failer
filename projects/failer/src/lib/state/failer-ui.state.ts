@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractState } from './abstract-state.class';
-
-export interface RequestUi {
-  errorCode: number;
-  method: string;
-  url: string;
-  delay?: number;
-}
+import { RequestUi } from '../models';
 
 const initialUi = (): RequestUi => ({
   method: 'any',

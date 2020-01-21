@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
-import { RequestUi } from './failer-ui.state';
 import { AbstractState } from './abstract-state.class';
-
-export interface RequestSort {
-  prop: keyof RequestUi;
-  direction: number;
-}
+import { RequestSort } from '../models';
 
 const initialSort = (): RequestSort => ({
   prop: null,

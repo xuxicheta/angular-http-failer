@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { FailerRequest, FailerRequestsState, RequestUi } from '../services/failer-requests.state';
+import { FailerRequestsState } from '../state/failer-requests.state';
 import { failerFormProvider, FAILER_FORM } from './providers/failer-form.provider';
 import { failerTableProvider, FailerTableType, FAILER_TABLE } from './providers/failer-table.provider';
+import { FailerRequest, RequestUi } from '../models';
 
 @Component({
   selector: 'lib-failer',
