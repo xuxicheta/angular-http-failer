@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { FailerRequestsState } from '../state/failer-requests.state';
 import { failerFormProvider, FAILER_FORM } from './providers/failer-form.provider';
 import { failerTableProvider, FailerTableType, FAILER_TABLE } from './providers/failer-table.provider';
 import { FailerRequest, RequestUi } from '../models';
+import { FailerUiState } from '../state/failer-ui.state';
+import { FailerSortState } from '../state/failer-sort.state';
+import { FailerEntitiesState } from '../state/failer-entities.state';
+import { FailerMediator } from '../state/failer.mediator';
 
 @Component({
   selector: 'lib-failer',
@@ -16,14 +19,17 @@ import { FailerRequest, RequestUi } from '../models';
 })
 export class FailerComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
-  public dataSource$ = this.failerRequestsState.selectAll();
+  public dataSource$ = this.failerMediator.selectAll();
 
   get errorCodeControl() {
     return this.failerForm.get('errorCode') as FormControl;
   }
 
   constructor(
-    private failerRequestsState: FailerRequestsState,
+    private failerUiState: FailerUiState,
+    private failerSortState: FailerSortState,
+    private failerEntitiesState: FailerEntitiesState,
+    private failerMediator: FailerMediator,
     @Inject(FAILER_TABLE) public readonly table: FailerTableType,
     @Inject(FAILER_FORM) public readonly failerForm: FormGroup,
   ) { }
@@ -37,8 +43,7 @@ export class FailerComponent implements OnInit, OnDestroy {
   }
 
   onErrorToggle(errorCode: number, request: FailerRequest) {
-    this.failerRequestsState.upsertEntity({
-      requestId: request.requestId,
+    this.failerEntitiesState.upsertEntity(request.requestId, {
       errorCode,
     });
   }
@@ -46,14 +51,13 @@ export class FailerComponent implements OnInit, OnDestroy {
   onError400Toggle(request: FailerRequest) {
     const errorCode = request.errorCode ? null : 400;
 
-    this.failerRequestsState.upsertEntity({
-      requestId: request.requestId,
+    this.failerEntitiesState.upsertEntity(request.requestId, {
       errorCode,
     });
   }
 
   onSort(direction: number, prop: keyof RequestUi) {
-    this.failerRequestsState.updateSort({
+    this.failerSortState.update({
       direction,
       prop,
     });
@@ -62,10 +66,10 @@ export class FailerComponent implements OnInit, OnDestroy {
   private formSubscription(): Subscription {
     const sub1 = this.failerForm.valueChanges
       .subscribe(value => {
-        this.failerRequestsState.updateUi(value);
+        this.failerUiState.update(value);
       });
 
-    const sub2 = this.failerRequestsState.selectUi()
+    const sub2 = this.failerUiState.select()
       .subscribe(value => {
         this.failerForm.setValue(value, { emitEvent: false });
       });
@@ -74,11 +78,11 @@ export class FailerComponent implements OnInit, OnDestroy {
   }
 
   onClear() {
-    this.failerRequestsState.reset();
+    this.failerEntitiesState.reset();
   }
 
   onDelete(request: FailerRequest) {
-    this.failerRequestsState.delete(request.requestId);
+    this.failerEntitiesState.deleteEntity(request.requestId);
   }
 
   public trackBy(request: FailerRequest) {

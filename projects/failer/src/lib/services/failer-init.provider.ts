@@ -1,14 +1,13 @@
-import { APP_BOOTSTRAP_LISTENER } from '@angular/core';
-import { FailerOpenerService } from './failer-opener.service';
-import { FailerRequestsState } from '../state/failer-requests.state';
+import { APP_INITIALIZER } from '@angular/core';
+import { FailerEntitiesState } from '../state/failer-entities.state';
 
-export function bootstrapFailer(failerRequestsState: FailerRequestsState) {
-  return () => failerRequestsState.init();
+export function initFailer(failerEntitiesState: FailerEntitiesState) {
+  return () => failerEntitiesState.init();
 }
 
-export const failerBootstrapProvider = {
-  provide: APP_BOOTSTRAP_LISTENER,
+export const failerInitProvider = {
+  provide: APP_INITIALIZER,
   multi: true,
-  useFactory: bootstrapFailer,
-  deps: [FailerRequestsState, FailerOpenerService],
+  useFactory: initFailer,
+  deps: [FailerEntitiesState],
 };

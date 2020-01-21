@@ -1,27 +1,31 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentRef, Injectable } from '@angular/core';
-import { filter, map, tap } from 'rxjs/operators';
+import { merge, Subscription } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 import { FailerComponent } from '../failer/failer.component';
 import { FailerKeyBusService } from './failer-key-bus.service';
-import { Subscription, merge } from 'rxjs';
 
 @Injectable()
 export class FailerOpenerService {
-  private overlayRef: OverlayRef = this.createOverlay();
+  private overlayRef: OverlayRef;
   private isOpened: boolean;
 
   constructor(
     private overlay: Overlay,
     private failerKeyBusService: FailerKeyBusService,
-  ) {
-    this.initSubscription();
+  ) {}
+
+  public bootstrap(): void {
+    this.overlayRef = this.createOverlay();
+
+    this.keyListenerSubscription();
     if (localStorage.getItem('opened')) {
       this.open();
     }
   }
 
-  private initSubscription(): Subscription {
+  private keyListenerSubscription(): Subscription {
     return this.failerKeyBusService.selectKeyBus()
       .subscribe(() => this.isOpened ? this.close() : this.open());
   }

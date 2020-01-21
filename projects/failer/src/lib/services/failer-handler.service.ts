@@ -3,19 +3,19 @@ import { Injectable } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FailerRequest, RequestMold } from '../models';
-import { FailerRequestsState } from '../state/failer-requests.state';
 import { FailerOpenerService } from './failer-opener.service';
+import { FailerEntitiesState } from '../state/failer-entities.state';
 
 @Injectable()
 export class FailerHandlerService {
   constructor(
-    private failerRequestsState: FailerRequestsState,
-    private failerOpener: FailerOpenerService, // for creation
+    private failerEntitiesState: FailerEntitiesState,
+    public failerOpener: FailerOpenerService, // for creation
   ) { }
 
   public requestHandle<T>(req: HttpRequest<T>): Observable<HttpErrorResponse> {
     const requestId = `${req.method} ${req.url}`;
-    const stored: FailerRequest = this.failerRequestsState.getEntity(requestId);
+    const stored: FailerRequest = this.failerEntitiesState.getEntity(requestId);
     const delay = (stored && stored.delay) || 0;
 
     return timer(delay).pipe(
@@ -62,6 +62,6 @@ export class FailerHandlerService {
       errorCode: null,
       delay: null,
     };
-    this.failerRequestsState.upsertEntity(failerRequest);
+    this.failerEntitiesState.upsertEntity(requestId, failerRequest);
   }
 }
